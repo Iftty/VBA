@@ -1,0 +1,49 @@
+Sub Auto()
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    Dim eachOne As Integer
+    Dim begin As Integer
+    Dim howMany As Integer
+    Dim xlsPath$
+    Dim path$
+    Dim eachArr As Variant
+    
+    howMany = 6 '有多少个渠道
+    
+    eachOne = 100 '每个渠道礼包码
+    eachArr = Array(1, 2, 3, 4, 5, 6) '具体到每个渠道多少个礼包码
+    
+    begin = 2 '礼包码从第几行开始
+    xlsPath = ThisWorkbook.path
+    
+    '为每个渠道分配礼包码
+    Dim num1 As Long
+    Dim num2 As Long
+    For i = 1 To howMany
+        'eachOne = eachArr(i - 1)
+        num1 = (i - 1) * eachOne + 1 + begin - 1
+        num2 = (i - 1) * eachOne + eachOne + begin
+        Sheets.Add after:=ActiveSheet
+        Worksheets(i + 1).Select
+        Worksheets(i + 1).Name = Worksheets(1).Name & i
+        Worksheets(i + 1).Range("a" & "1" & ":" & "a" & (num2 - num1)).Value = Worksheets(1).Range("a" & num1 & ":" & "a" & num2).Value
+
+    Next
+    
+    For i = 1 To howMany
+        path = xlsPath & "\" & i & "\"
+        'VBA.MkDir (xlsPath & "\" & i)
+        Worksheets(i + 1).SaveAs Filename:=path & Worksheets(1).Name & ".txt"
+    Next
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
+End Sub
+
+
+
+
+
+
+
+
+
